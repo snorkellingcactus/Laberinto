@@ -1,0 +1,37 @@
+<html>
+<head>
+<script type="text/javascript" src="./pared.js"></script>
+<script type="text/javascript" src="./charl.js"></script>
+<script type="text/javascript" src="creaParedes.js"></script>
+<script type="text/javascript" src="mat.js"></script>
+<script type="text/javascript" src="prueba.js"></script>
+<link rel="stylesheet" type="text/css" href="./index.css" />
+</head>
+<body>
+
+<span id="string"></span>
+<div Id="caja"></div>
+
+	<script>
+				
+				control=new CtlMover(10 , 10);
+				control.refresca=function()
+				{
+					document.getElementById("caja").style.left=this.posX+"px";
+					document.getElementById("caja").style.top=this.posY+"px";
+				};
+				
+				creaMapa(2);
+				
+				document.body.addEventListener
+				(
+					"keydown",
+					function(event)
+					{
+						capEntrada(event)
+					}
+				);
+		</script>
+<script type="text/javascript" src="prueba2.js"></script>
+</body>
+</html>

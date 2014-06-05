@@ -1,0 +1,16 @@
+*{padding:0px;margin:0px}
+
+.pared 
+{            
+	position:absolute;
+	color: brown;
+	background-color:"grey";
+	background-image: url("./Koala.jpg")
+}
+#caja
+{
+	background-color:red;
+	position:absolute;
+	width:10px;
+	height:10px
+}
