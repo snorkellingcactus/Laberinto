@@ -5,14 +5,13 @@ function creaMapa(cantidad)
 	(
 		[
 			[	100	,	100	],
-			[	200,		100	],
-			[	100	,	150	],
-			[	200,		150	]
+			[	190,		100	],
+			[	190,		120	]
 		]
 	);
 	
-	genLColRandom=new GenLColRandom();
-	genLColRandom.fn.push
+	puntoColRandom=new PuntoColRandom();
+	puntoColRandom.fn.push
 	(
 		new FnCuad
 		(
@@ -25,12 +24,8 @@ function creaMapa(cantidad)
 			)
 		)
 	);
-	genLColRandom.rangoM=[0,0];
-	genLColRandom.rangoA=[0,0];
-	
-	//window.console.log(genLColRandom.fn[0]);
-	
-	//pared.genRandom(cantidad,genLColRandom);
+	puntoColRandom.rangoM=[0,0];
+	puntoColRandom.rangoA=[0,0];
 	
 	graficaPared(pared);
 }
