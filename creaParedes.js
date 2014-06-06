@@ -4,30 +4,26 @@ function creaMapa(cantidad)
 	 pared=new Pared
 	(
 		[
-			[100,100],
-			[150,100],
-			[150,150],
-			[200,150],
-			[200,200]
+			[50,100],
+			[51,100]
 		]
 	);
 	
 	puntoColRandom=new PuntoColRandom();
 	puntoColRandom.fn.push
 	(
-		new FnCuad
+		new FnLin
 		(
 			0,
-			new FnLin
-			(
-				0,
-				0,
-				1
-			)
+			0,
+			1
 		)
 	);
-	puntoColRandom.rangoM=[0,0];
-	puntoColRandom.rangoA=[0,0];
+	
+	puntoColRandom.rangoLong=[-1,20]
+	puntoColRandom.rangoM=[-2,2];
+	puntoColRandom.rangoA=[-1,1];
+	pared.genRandom(cantidad , puntoColRandom);
 	
 	graficaPared(pared);
 }

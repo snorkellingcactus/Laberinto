@@ -1,6 +1,7 @@
 <html>
 <head>
 <script type="text/javascript" src="./pared.js"></script>
+<script type="text/javascript" src="./teclado.js"></script>
 <script type="text/javascript" src="./charl.js"></script>
 <script type="text/javascript" src="creaParedes.js"></script>
 <script type="text/javascript" src="mat.js"></script>
@@ -10,26 +11,93 @@
 
 <span id="string"></span>
 <div Id="caja"></div>
+<input type="hidden" id="teclado"/>
 
 	<script>
 				
-				control=new CtlMover(10 , 10);
-				control.refresca=function()
+				charl=new Tipito(10 , 10);
+				charl.refresca=function()
 				{
 					document.getElementById("caja").style.left=this.posX+"px";
 					document.getElementById("caja").style.top=this.posY+"px";
 				};
+				charl.refresca();
 				
-				creaMapa(2);
+				mueveIzq=new TeclaEvt
+				(
+					{
+						jugador:charl,
+						keydown:function()
+						{
+							this.jugador.setPosX(-2);
+							this.jugador.refresca();
+						}
+					}
+				);
+				
+				mueveDer=new TeclaEvt
+				(
+					{
+						jugador:charl,
+						keydown:function()
+						{
+							this.jugador.setPosX(2);
+							this.jugador.refresca();
+						}
+					}
+				);
+				
+				mueveAr=new TeclaEvt
+				(
+					{
+						jugador:charl,
+						keydown:function()
+						{
+							this.jugador.setPosY(-2);
+							this.jugador.refresca();
+						}
+					}
+				);
+				
+				mueveAb=new TeclaEvt
+				(
+					{
+						jugador:charl,
+						keydown:function()
+						{
+							this.jugador.setPosY(2);
+							this.jugador.refresca();
+						}
+					}
+				);
+				capTeclado=new Teclado();
+				capTeclado.nEvt(39 , mueveDer);
+				capTeclado.nEvt(37 , mueveIzq);
+				capTeclado.nEvt(38 , mueveAr);
+				capTeclado.nEvt(40 , mueveAb);
+				
+				
+				
+				creaMapa(20);
+				
 				
 				document.body.addEventListener
 				(
 					"keydown",
 					function(event)
 					{
-						capEntrada(event)
+						capTeclado.detona(event)
 					}
 				);
+				document.body.addEventListener
+				(
+					"keyup",
+					function(event)
+					{
+						capTeclado.detona(event)
+					}
+				);
+				
 		</script>
 </body>
 </html>

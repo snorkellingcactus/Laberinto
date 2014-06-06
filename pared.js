@@ -3,16 +3,15 @@ PuntoCol= function(posX , posY)
   this.posX=posX;
   this.posY=posY;
 }
-PuntoColRandom=function(puntoCol)
+PuntoColRandom=function()
 {
-	this.rangoLong=[5,20];
 	this.rangoM=[0,5];
 	this.rangoA=[0,5];
   	
 	this.fn=[];
 	this.fnSel=-1;
 	
-	this.gen=function()
+	this.gen=function(puntoCol)
 	{
 		if(this.fnSel<0)
 		{
@@ -38,18 +37,18 @@ PuntoColRandom=function(puntoCol)
 			this.rangoA[1]
 		);
 		
-		window.console.log(" X = "+fn.x);
-		window.console.log(" M = "+fn.m);
-		window.console.log(" B = "+fn.b);
+		//window.console.log(" X = "+fn.x);
+		//window.console.log(" M = "+fn.m);
+		//window.console.log(" B = "+fn.b);
 	
 		var cord=fn.calc();
 		
-		window.console.log("Resultado= ( "+cord[0]+" ; "+cord[1]+" )");
+		//window.console.log("Resultado= ( "+cord[0]+" ; "+cord[1]+" )");
 		
 		return new PuntoCol
 		(
-			puntoCol.posX+cord[0],
-			puntoCol.posY+cord[1]
+			puntoCol.posX+Math.round(cord[0]),
+			puntoCol.posY+Math.round(cord[1])
 		);
 	}
 }
@@ -60,7 +59,22 @@ Pared=function(listaPuntos)
 }
 Pared.prototype.procesaPuntos=function(listaPuntos)
 {
-	window.console.log(listaPuntos);
+	if(this.puntosCol.length)
+	{
+		var nCol=this.puntosCol.length-1;
+		
+		nCol=this.puntosCol[nCol];
+		
+		listaPuntos.unshift
+		(
+			[
+				nCol.posX,
+				nCol.posY
+			]
+		)
+	};
+	
+	//window.console.log(listaPuntos);
 	for(var i=0;i<listaPuntos.length-1;i++)
 	{
 		var xA=listaPuntos[i][0];
@@ -93,7 +107,7 @@ Pared.prototype.procesaPuntos=function(listaPuntos)
 			0
 		);
 		
-		var inc=Math.round((1-fn.b)/fn.m)||1;
+		var inc=Math.abs(Math.round((1-fn.b)/fn.m))||1;
 		
 		while(fn.x<=Math.abs(ladoX))
 		{
@@ -127,10 +141,12 @@ Pared.prototype.genRandom=function(cantidad , puntoColRandom)
 {
 	for(var i=0;i<cantidad;i++)
 	{
-		var nColAct=this.lineasColision.length-1;
-		var pColAct=this.lineasColision[nColAct];
+		var nColAct=this.puntosCol.length-1;
+		var pColAct=this.puntosCol[nColAct];
 		
 		var nColRandom=puntoColRandom.gen(pColAct);
+		
+		//window.console.log(nColRandom);
 		
 		this.procesaPuntos
 		(
@@ -149,7 +165,7 @@ function graficaPared(pared)
 	var posX=0;
 	var posY=0;
 	
-	window.console.log(pared.puntosCol);
+	//window.console.log(pared.puntosCol);
 	for(var i=0;i<pared.puntosCol.length-1;i++)
 	{
 		var pCol=pared.puntosCol[i];
@@ -175,7 +191,7 @@ function graficaPared(pared)
 		span.style.left=pCol.posX+fixX;
 		span.style.top=pCol.posY+fixY;
 		
-		window.console.log
+		/*window.console.log
 		(
 			{
 				ancho:span.style.width,
@@ -185,7 +201,7 @@ function graficaPared(pared)
 				Col:pCol,
 				ColSig:pColSig
 			}
-		);
+		);*/
 		
 		document.body.appendChild(span);
 	}
