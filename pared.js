@@ -60,14 +60,13 @@ Pared=function(listaPuntos)
 }
 Pared.prototype.procesaPuntos=function(listaPuntos)
 {
-	for(var i=1;i<listaPuntos.length;i++)
+	window.console.log(listaPuntos);
+	for(var i=0;i<listaPuntos.length-1;i++)
 	{
-		var xA=listaPuntos[i-1][0];
-		var yA=listaPuntos[i-1][1];
-		var xB=listaPuntos[i][0];
-		var yB=listaPuntos[i][1];
-		//window.console.log("PuntoA = ("+xA+" ; "+yA+")");
-		//window.console.log("PuntoB = ("+xB+" ; "+yB+")");
+		var xA=listaPuntos[i][0];
+		var yA=listaPuntos[i][1];
+		var xB=listaPuntos[i+1][0];
+		var yB=listaPuntos[i+1][1];
 		
 		var signoLX=1;
 		var signoLY=1;
@@ -86,8 +85,6 @@ Pared.prototype.procesaPuntos=function(listaPuntos)
 		{
 			signoLY=-1;
 		}
-		//window.console.log("Delta X = "+ladoX);
-		//window.console.log("Delta Y = "+ladoY);
 
 		var fn=new FnLin
 		(
@@ -151,41 +148,44 @@ function graficaPared(pared)
 {
 	var posX=0;
 	var posY=0;
-		
+	
+	window.console.log(pared.puntosCol);
 	for(var i=0;i<pared.puntosCol.length-1;i++)
 	{
 		var pCol=pared.puntosCol[i];
 		var pColSig=pared.puntosCol[i+1];
+		var fixX=0;
+		var fixY=0;
+		var ancho=Math.ceil(pColSig.posX-pCol.posX);
+		var alto=Math.ceil(pColSig.posY-pCol.posY);
 		
-		var ancho=Math.abs
-		(
-			Math.ceil
-			(
-				pColSig.posX-pCol.posX
-			)
-		);
-		
-		var alto=Math.abs
-		(
-			Math.ceil
-			(
-				pColSig.posY-pCol.posY
-			)
-		);
-		
+		if(ancho<0)
+		{
+			fixX=ancho;
+		}
+		if(alto<0)
+		{
+			fixY=alto;
+		}
 		var span=document.createElement("span");
 		
 		span.setAttribute("class" , "pared");
-		span.style.width=ancho||Math.abs(posX)||1;
-		span.style.height=alto||Math.abs(posY)||1;
-		span.style.left=pCol.posX;
-		span.style.top=pCol.posY;
+		span.style.width=Math.abs(ancho)||Math.abs(posX)||1;
+		span.style.height=Math.abs(alto)||Math.abs(posY)||1;
+		span.style.left=pCol.posX+fixX;
+		span.style.top=pCol.posY+fixY;
 		
-		window.console.log(pColSig);
-		window.console.log(pCol);
-		
-		posX=ancho;
-		posY=alto;
+		window.console.log
+		(
+			{
+				ancho:span.style.width,
+				alto:span.style.height,
+				left:span.style.left,
+				top:span.style.top,
+				Col:pCol,
+				ColSig:pColSig
+			}
+		);
 		
 		document.body.appendChild(span);
 	}
