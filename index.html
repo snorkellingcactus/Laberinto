@@ -14,17 +14,57 @@
 <input type="hidden" id="teclado"/>
 
 	<script>
+				function cargaMapaLocal()
+				{
+					var j=0;
+					
+					while(!!localStorage["posX"+j]&&j<2000)
+					{
+						paredA.puntosCol.push
+						(
+							new PuntoCol
+							(
+								parseInt(localStorage["posX"+j]),
+								parseInt(localStorage["posY"+j])
+							)
+						)
+						j++;
+					}
+					graficaPared(paredA);
+				}
 				function genPuntos(event)
 				{
+					if(localStorage.length)
+					{
+						return 0;
+					}
 					var nCol=paredA.puntosCol.length-1;
 					
-					window.console.log(event);
 					paredA.procesaPuntos
 					(
 						[
 							[event.pageX,event.pageY]
 						]
 					)
+					if(Hipo(event.pageX-pared.puntosCol[0].posX,event.pageY-pared.puntosCol[0].posY)<20)
+					{
+						paredA.procesaPuntos
+						(
+							[
+								[
+									pared.puntosCol[0].posX,
+									pared.puntosCol[0].posY
+								]
+							]
+						)
+						
+						localStorage.clear();
+						for(var j=0;j<paredA.puntosCol.length;j++)
+						{
+							localStorage["posX"+j]=paredA.puntosCol[j].posX;
+							localStorage["posY"+j]=paredA.puntosCol[j].posY;
+						}
+					}
 					
 					for(var i=nCol;i<paredA.puntosCol.length-1;i++)
 					{
@@ -41,23 +81,33 @@
 					"click",
 					genPuntos
 				);
-				var paredA=creaMapa
-				(
-					0,
-					[
-						[100,100],
-						[150,100]
-					],
-					[
-						20,
-						30
-					]
-				);
+				
+				paredA=new Pared();
+				
+				if(!localStorage.length)
+				{
+					var paredA=creaMapa
+					(
+						0,
+						[
+							[100,100],
+							[150,100]
+						],
+						[
+							20,
+							30
+						]
+					);
+				}
+				else
+				{
+					cargaMapaLocal();
+				}
 				
 				charl=new Tipito
 				(
-					10,
-					10
+					120,
+					120
 				);
 				charl.refresca=function()
 				{
@@ -126,11 +176,22 @@
 						}
 					}
 				);
+				borraMapaLocal=new TeclaEvt
+				(
+					{
+						jugador:charl,
+						keypress:function()
+						{
+							localStorage.clear();
+						}
+					}
+				);
 				capTeclado=new Teclado();
 				capTeclado.nEvt(39 , mueveDer);
 				capTeclado.nEvt(37 , mueveIzq);
 				capTeclado.nEvt(38 , mueveAr);
 				capTeclado.nEvt(40 , mueveAb);
+				capTeclado.nEvt(8 , borraMapaLocal);
 				
 				
 				document.body.addEventListener
