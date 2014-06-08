@@ -14,14 +14,70 @@
 <input type="hidden" id="teclado"/>
 
 	<script>
+				function genPuntos(event)
+				{
+					var nCol=paredA.puntosCol.length-1;
+					
+					window.console.log(event);
+					paredA.procesaPuntos
+					(
+						[
+							[event.pageX,event.pageY]
+						]
+					)
+					
+					for(var i=nCol;i<paredA.puntosCol.length-1;i++)
+					{
+						var pCol=pared.puntosCol[i];
+						var pColSig=pared.puntosCol[i+1];
+						document.body.appendChild
+						(
+							graficaPuntos(pCol , pColSig)
+						);
+					}
+				}
+				document.body.addEventListener
+				(
+					"click",
+					genPuntos
+				);
+				var paredA=creaMapa
+				(
+					0,
+					[
+						[100,100],
+						[150,100]
+					],
+					[
+						20,
+						30
+					]
+				);
 				
-				charl=new Tipito(10 , 10);
+				charl=new Tipito
+				(
+					10,
+					10
+				);
 				charl.refresca=function()
 				{
 					document.getElementById("caja").style.left=this.posX+"px";
 					document.getElementById("caja").style.top=this.posY+"px";
 				};
 				charl.refresca();
+				
+				/*verifCol=new VerifCol
+				(
+					new PuntoCol
+					(
+						charl.posX,
+						charl.posY
+					),
+					paredA.puntosCol[0].posY,
+					paredB.puntosCol[5].posY,
+					paredA.puntosCol[3].posX,
+					paredB.puntosCol[3].posX
+				)*/
 				
 				mueveIzq=new TeclaEvt
 				(
@@ -75,10 +131,6 @@
 				capTeclado.nEvt(37 , mueveIzq);
 				capTeclado.nEvt(38 , mueveAr);
 				capTeclado.nEvt(40 , mueveAb);
-				
-				
-				
-				creaMapa(20);
 				
 				
 				document.body.addEventListener

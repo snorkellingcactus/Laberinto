@@ -7,7 +7,9 @@ PuntoColRandom=function()
 {
 	this.rangoM=[0,5];
 	this.rangoA=[0,5];
-  	
+	this.rangoB=[0,0];
+	this.rangoX=[5,10];
+	
 	this.fn=[];
 	this.fnSel=-1;
 	
@@ -16,34 +18,32 @@ PuntoColRandom=function()
 		if(this.fnSel<0)
 		{
 			var fnSel=getRamon(0 , this.fn.length-1);
-			//window.console.log(fnSel);
 		}
 	
 		var fn=this.fn[fnSel];
 		
 		fn.x=getRamon
 		(
-			this.rangoLong[0],
-			this.rangoLong[1]
+			this.rangoX[0],
+			this.rangoX[1]
 		);
 		fn.m=getRamon
 		(
 			this.rangoM[0],
 			this.rangoM[1]
+		);
+		fn.b=getRamon
+		(
+			this.rangoB[0],
+			this.rangoB[1]
 		);		
 		fn.a=getRamon
 		(
 			this.rangoA[0],
 			this.rangoA[1]
 		);
-		
-		//window.console.log(" X = "+fn.x);
-		//window.console.log(" M = "+fn.m);
-		//window.console.log(" B = "+fn.b);
 	
 		var cord=fn.calc();
-		
-		//window.console.log("Resultado= ( "+cord[0]+" ; "+cord[1]+" )");
 		
 		return new PuntoCol
 		(
@@ -52,10 +52,14 @@ PuntoColRandom=function()
 		);
 	}
 }
-Pared=function(listaPuntos)
+Pared=function()
 {
 	this.puntosCol=[];
-	this.procesaPuntos(listaPuntos);
+	
+	if(arguments.length)
+	{
+		this.procesaPuntos(arguments[0]);
+	}
 }
 Pared.prototype.procesaPuntos=function(listaPuntos)
 {
@@ -74,7 +78,6 @@ Pared.prototype.procesaPuntos=function(listaPuntos)
 		)
 	};
 	
-	//window.console.log(listaPuntos);
 	for(var i=0;i<listaPuntos.length-1;i++)
 	{
 		var xA=listaPuntos[i][0];
@@ -84,8 +87,10 @@ Pared.prototype.procesaPuntos=function(listaPuntos)
 		
 		var signoLX=1;
 		var signoLY=1;
+		var signoM=1;
 		var ladoX=xB-xA;
 		var ladoY=yB-yA;
+		
 		
 		if(!ladoX)
 		{
@@ -103,21 +108,26 @@ Pared.prototype.procesaPuntos=function(listaPuntos)
 		var fn=new FnLin
 		(
 			ladoY/ladoX,
-			0,
+			1,
 			0
 		);
 		
-		var inc=Math.abs(Math.round((1-fn.b)/fn.m))||1;
+		if(fn.m<0)
+		{
+			signoM=-1;
+		}
 		
 		while(fn.x<=Math.abs(ladoX))
 		{
 			var xa=Math.round(fn.calc()[0]);
 	 		var ya=Math.round(fn.calc()[1]);
  			
+ 			var inc=Math.abs(Math.round(((fn.calc()+1)-fn.b)/fn.m))||1;
+ 			
  			this.insertaCol
  			(
  				xA+(xa)*signoLX,
- 				yA+(ya)*signoLY
+ 				yA+(ya)*signoLY*signoM
  			);
  			
  			fn.x+=inc
@@ -159,17 +169,10 @@ Pared.prototype.genRandom=function(cantidad , puntoColRandom)
 		);
 	}
 }
-
-function graficaPared(pared)
+function graficaPuntos(pCol,pColSig)
 {
-	var posX=0;
-	var posY=0;
-	
-	//window.console.log(pared.puntosCol);
-	for(var i=0;i<pared.puntosCol.length-1;i++)
-	{
-		var pCol=pared.puntosCol[i];
-		var pColSig=pared.puntosCol[i+1];
+		var posX=0;
+		var posY=0;
 		var fixX=0;
 		var fixY=0;
 		var ancho=Math.ceil(pColSig.posX-pCol.posX);
@@ -191,18 +194,37 @@ function graficaPared(pared)
 		span.style.left=pCol.posX+fixX;
 		span.style.top=pCol.posY+fixY;
 		
-		/*window.console.log
+		return span
+}
+function graficaPared(pared)
+{
+	
+	//window.console.log(pared.puntosCol);
+	for(var i=0;i<pared.puntosCol.length-1;i++)
+	{
+		var pCol=pared.puntosCol[i];
+		var pColSig=pared.puntosCol[i+1];
+		document.body.appendChild
 		(
-			{
-				ancho:span.style.width,
-				alto:span.style.height,
-				left:span.style.left,
-				top:span.style.top,
-				Col:pCol,
-				ColSig:pColSig
-			}
-		);*/
-		
-		document.body.appendChild(span);
+			graficaPuntos(pCol , pColSig)
+		);
+	}
+}
+VerifCol=function(puntoCol , puntoColMax , puntoColMin)
+{
+	this.puntoCol=puntoCol;
+	this.puntoColMax=puntoColMax;
+	this.puntoColMin=puntoColMin;
+
+}
+VerifCol.prototype.colisiona=function()
+{
+	if(this.puntoColposX>this.puntoColMax.posX||this.puntoColposY>this.puntoColMax.posY||this.puntoColposX<this.puntoColMin.posX||this.puntoColposY<this.puntoColMin.posY)
+	{
+		return 1;
+	}
+	else
+	{
+		return 0;
 	}
 }

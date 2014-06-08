@@ -1,16 +1,16 @@
 //Un circulo por seno y coseno.
 Circulo=function(x,y,radio,rot)
 {
-	this.x=x;
-	this.y=y;
-	this.radio=radio;
-	this.rot=rot;
+	this.m=x;
+	this.x=y;
+	this.b=radio;
+	this.a=rot;
 	this.cord=[];
 };
 Circulo.prototype.calc=function()
 {
-	this.cord[0]=Math.cos(this.rot)*this.radio+this.x;
-	this.cord[1]=Math.sin(this.rot)*this.radio+this.y;
+	this.cord[0]=Math.cos(this.a)*this.b+this.m;
+	this.cord[1]=Math.sin(this.a)*this.b+this.x;
 	return this.cord;
 }
 

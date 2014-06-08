@@ -1,31 +1,63 @@
-function creaMapa(cantidad)
+function puntoHV(HV,sentido,longX,longY)
+{
+	var largo=getRamon
+	(
+		longX*sentido,
+		longY*sentido
+	);
+	
+	
+	return[		largo*HV	,		largo*!HV	]
+}
+function creaMapa(cantidad,puntoIni,ladoMax)
 {
 	
-	 pared=new Pared
+	pared=new Pared
 	(
-		[
-			[50,100],
-			[51,100]
-		]
+		puntoIni
 	);
+	var puntos=[]
 	
-	puntoColRandom=new PuntoColRandom();
-	puntoColRandom.fn.push
-	(
-		new FnLin
+	var HV=true;
+	var sentidos=[];
+	
+	for(var c=0;c<cantidad;c++)
+	{
+		var puntoHVRandom;
+		var lastX;
+		var lastY=pared.puntosCol.length-1;
+		
+		lastX=pared.puntosCol[lastY].posX;
+		lastY=pared.puntosCol[lastY].posY;
+		
+		if(sentidos.length>4)
+		{
+			sentidos.shift();
+		};
+		
+		sentidos.push(getBinRamon()||-1);
+		if(sentidos.length>3&&sentidos[3]!=sentidos[1])
+		{
+			sentidos[3]*=-1;
+		}
+		
+		puntoHVRandom=puntoHV(HV,sentidos[sentidos.length-1],ladoMax[0],ladoMax[1]);
+		
+		puntoHVRandom[0]+=lastX;
+		puntoHVRandom[1]+=lastY;
+		
+		pared.procesaPuntos
 		(
-			0,
-			0,
-			1
+			[
+				puntoHVRandom
+			]
 		)
-	);
-	
-	puntoColRandom.rangoLong=[-1,20]
-	puntoColRandom.rangoM=[-2,2];
-	puntoColRandom.rangoA=[-1,1];
-	pared.genRandom(cantidad , puntoColRandom);
+		HV=!HV
+	}
 	
 	graficaPared(pared);
+	return pared
+	
 }
 
 // funcion que da numeros random
