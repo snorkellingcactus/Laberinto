@@ -121,9 +121,8 @@ Pared.prototype.procesaPuntos=function(listaPuntos)
 		{
 			var xa=Math.round(fn.calc()[0]);
 	 		var ya=Math.round(fn.calc()[1]);
- 			
- 			var inc=Math.abs(Math.round(((fn.calc()+1)-fn.b)/fn.m))||1;
- 			
+	 		
+	 		var inc=Math.abs(Math.round((1-fn.b)/fn.m))||1;
  			this.insertaCol
  			(
  				xA+(xa)*signoLX,

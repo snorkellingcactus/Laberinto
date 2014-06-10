@@ -90,8 +90,8 @@
 					(
 						0,
 						[
-							[100,100],
-							[150,100]
+							[50,50],
+							[100,50]
 						],
 						[
 							20,
@@ -104,10 +104,68 @@
 					cargaMapaLocal();
 				}
 				
+				function puntosColCercanos()
+				{
+					var posX=charl.posX;
+					var posY=charl.posY;
+					var puntosCol=[0,0,0,0];
+					var distSupDer=Hipo(paredA.puntosCol[0].posX-posX,paredA.puntosCol[0].posY-posY);
+					var distInfDer=Hipo(paredA.puntosCol[0].posX-posX,paredA.puntosCol[0].posY-posY);;
+					var distSupIzq=Hipo(posX-paredA.puntosCol[0].posX,posY-paredA.puntosCol[0].posY);;
+					var distInfIzq=Hipo(paredA.puntosCol[0].posX-posX,paredA.puntosCol[0].posY-posY);;
+					var j=1;
+					while(j<paredA.puntosCol.length)
+					{
+					 var colAct=paredA.puntosCol[j];
+					 
+					 var dist=Hipo(posX-colAct.posX,posY-colAct.posY);
+					 
+						if(colAct.posY>posY&&colAct.posX<posX)
+						{
+							if(dist<distSupIzq)
+							{
+								distSupIzq=dist;
+								puntosCol[2]=j;
+							}
+						}
+						if(colAct.posY<posY&&colAct.posX<posX)
+						{
+							if(dist<distInfIzq)
+							{
+								distInfIzq=dist;
+								puntosCol[3]=j;
+							}
+						}
+						if(colAct.posY>posY&&colAct.posX>posX)
+						{
+							if(dist<distSupDer)
+							{
+								distSupDer=dist;
+								puntosCol[0]=j;
+							}
+						}
+						if(colAct.posY<posY&&colAct.posX>posX)
+						{
+							if(dist<distInfDer)
+							{
+								distInfDer=dist;
+								puntosCol[1]=j;
+							}
+						}
+						j++
+					}
+					
+					for(j=0;j<puntosCol.length;j++)
+					{
+						window.console.log("PuntoCol N "+puntosCol[j]+" :");
+						window.console.log(paredA.puntosCol[puntosCol[j]]);
+						window.console.log(document.getElementsByTagName("span")[puntosCol[j]+1])
+					}
+				}
 				charl=new Tipito
 				(
-					120,
-					120
+					80,
+					80
 				);
 				charl.refresca=function()
 				{
