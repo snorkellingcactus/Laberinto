@@ -14,7 +14,7 @@ Circulo.prototype.calc=function()
 	return this.cord;
 }
 
-//Un a funcion lineal.
+//Una funcion lineal.
 FnLin=function(m,x,b)
 {
 	this.m=m;	//Pendiente
@@ -45,6 +45,7 @@ FnCuad.prototype.calc=function()
 	return this.cord;
 }
 
+//Bhascara.
 function Bhaskara()
 {
 	return 
@@ -53,6 +54,8 @@ function Bhaskara()
 		(-this.m-Math.sqrt(Math.pow(this.m,2)-4*this.a*this.b))/(this.a*2)
 	];
 }
+
+//Pitágoras.
 function Hipo(a,b)
 {
 		return Math.sqrt

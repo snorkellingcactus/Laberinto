@@ -1,63 +1,117 @@
-function puntoHV(HV,sentido,longX,longY)
+function puntoHV(HV,sentido,ancho,alto)	//Crea un punto horizontal o vertical.
 {
-	var largo=getRamon
-	(
-		longX*sentido,
-		longY*sentido
-	);
+	//HV 1 o 0 define si es horizontal o vertical, respectivamente.
 	
-	
-	return[		largo*HV	,		largo*!HV	]
+	return[ancho*HV*(sentido||-1) , alto*!HV*(sentido||-1)]
 }
-function creaMapa(cantidad,puntoIni,ladoMax)
+
+//Función que genera puntos random y devuelve una pared con esos puntos.
+function creaMapa(cantidad,puntoIni,puntoFin)
 {
-	
-	pared=new Pared
+	//Creo una grilla de 10x10.
+	matriz=new MatrizXY
 	(
-		puntoIni
+		puntoIni[0],
+		puntoIni[1],
+		puntoFin[0],
+		puntoFin[1],
+		10,
+		10
 	);
-	var puntos=[]
-	
+	pared=new Pared([puntoIni,puntoIni]);
 	var HV=true;
-	var sentidos=[];
 	
-	for(var c=0;c<cantidad;c++)
+	for(var c=0;c<matriz.celda.length;c++)
 	{
-		var puntoHVRandom;
-		var lastX;
-		var lastY=pared.puntosCol.length-1;
+		//Defino los posibles sentidos.
+		var HV=Math.random()*100;
 		
-		lastX=pared.puntosCol[lastY].posX;
-		lastY=pared.puntosCol[lastY].posY;
-		
-		if(sentidos.length>4)
+		var punto;
+		if(HV<25)
 		{
-			sentidos.shift();
-		};
-		
-		sentidos.push(getBinRamon()||-1);
-		if(sentidos.length>3&&sentidos[3]!=sentidos[1])
+			//Linea hacia la derecha.
+			punto=puntoHV
+			(
+				1,
+				1,
+				matriz.an,
+				matriz.al
+			);
+		}
+		if(HV>=25&&HV<50)
 		{
-			sentidos[3]*=-1;
+			//Linea hacia abajo.
+			punto=puntoHV
+			(
+				0,
+				0,
+				matriz.an,
+				matriz.al
+			);
+		}
+		if(HV>=50&&HV<75)
+		{
+			//Linea hacia la izquierda.
+			punto=puntoHV
+			(
+				1,
+				0,
+				matriz.an,
+				matriz.al
+			);
+		}
+		if(HV>=75&&HV<=100)
+		{
+			//Linea Hacia arriba.
+			punto=puntoHV
+			(
+				0,
+				1,
+				matriz.an,
+				matriz.al
+			);
 		}
 		
-		puntoHVRandom=puntoHV(HV,sentidos[sentidos.length-1],ladoMax[0],ladoMax[1]);
-		
-		puntoHVRandom[0]+=lastX;
-		puntoHVRandom[1]+=lastY;
-		
+		//Le asigno el punto random generado a la pared. 
 		pared.procesaPuntos
 		(
 			[
-				puntoHVRandom
+				[
+					pared.puntosCol[pared.puntosCol.length-1].posX+punto[0],
+					pared.puntosCol[pared.puntosCol.length-1].posY+punto[1]
+				]
 			]
-		)
-		HV=!HV
-	}
+		);
+		//Creo divs para graficar la grilla en el documento HTMl.
+		
+		//Divs para las lineas horizontales.
+		spanA=document.createElement("div");
+		spanA.style.backgroundColor="silver";
+		spanA.style.width=matriz.an;
+		spanA.style.height="1px";
+		spanA.style.top=matriz.celda[c].y;
+		spanA.style.left=matriz.celda[c].x;
+		spanA.style.position="absolute";
+		
+		//Divs para las lineas verticales.
+		spanB=document.createElement("div");		//Creo el elemento div.
+		spanB.style.backgroundColor="silver";
+		spanB.style.width="1px";
+		spanB.style.height=matriz.al;					//Tendrá el alto calculado por el obj matriz.
+		spanB.style.top=matriz.celda[c].y;		//Le asigno la posición X de la columna actual.
+		spanB.style.left=matriz.celda[c].x;	//Le asigno la posición X de la fila actual.
+		spanB.style.position="absolute";				//Tienen posición absoluta.
+		
+		//Inserto los divs en el cuerpo del documento.
+		document.body.appendChild(spanA);
+		document.body.appendChild(spanB);
+	};
 	
+	//Dibujo los puntos de la pared.
 	graficaPared(pared);
-	return pared
 	
+	//Devuelvo la pared.
+	return pared;
 }
 
 // funcion que da numeros random

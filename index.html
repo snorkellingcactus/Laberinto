@@ -1,5 +1,6 @@
 <html>
 <head>
+<script type="text/javascript" src="MatrizXY.js"></script>
 <script type="text/javascript" src="./pared.js"></script>
 <script type="text/javascript" src="./teclado.js"></script>
 <script type="text/javascript" src="./charl.js"></script>
@@ -14,12 +15,14 @@
 <input type="hidden" id="teclado"/>
 
 	<script>
+				//Función que carga (si es que está) el mapa guardado en localStorage.				
 				function cargaMapaLocal()
 				{
 					var j=0;
 					
 					while(!!localStorage["posX"+j]&&j<2000)
 					{
+						//Asigno los puntos del localStorage en la paredA.
 						paredA.puntosCol.push
 						(
 							new PuntoCol
@@ -30,24 +33,35 @@
 						)
 						j++;
 					}
+					
+					//Grafico la pared.
 					graficaPared(paredA);
 				}
+				
 				function genPuntos(event)
 				{
+					//Si hay info guardada en localStorage, no hago nada.
 					if(localStorage.length)
 					{
 						return 0;
 					}
+					
+					//El número del último punto de paredA.
 					var nCol=paredA.puntosCol.length-1;
 					
+					//Genero los puntos intermedios entre el ultimo punto
+					//y el punto donde se hizo click con el mouse.
 					paredA.procesaPuntos
 					(
 						[
 							[event.pageX,event.pageY]
 						]
 					)
+					
+					//Si la distancia entre el punto del click y el primer punto de la pared es menor a 20.
 					if(Hipo(event.pageX-pared.puntosCol[0].posX,event.pageY-pared.puntosCol[0].posY)<20)
 					{
+						//Cierro el mapa generando los puntos necesarios para terminar en el principio.
 						paredA.procesaPuntos
 						(
 							[
@@ -56,9 +70,12 @@
 									pared.puntosCol[0].posY
 								]
 							]
-						)
+						);
 						
+						//Borro todo lo que halla en el localStorage.
 						localStorage.clear();
+						
+						//Almaceno los valores XY de cada punto de la pared.
 						for(var j=0;j<paredA.puntosCol.length;j++)
 						{
 							localStorage["posX"+j]=paredA.puntosCol[j].posX;
@@ -66,84 +83,104 @@
 						}
 					}
 					
+					//Grafico los puntos restantes.
 					for(var i=nCol;i<paredA.puntosCol.length-1;i++)
 					{
-						var pCol=pared.puntosCol[i];
-						var pColSig=pared.puntosCol[i+1];
+						var pCol=pared.puntosCol[i];			//Punto actual
+						var pColSig=pared.puntosCol[i+1];	//Punto siguiente
+						
+						//Introduzco mediante DOM el span devuelto por la funcion graficaPuntos.
 						document.body.appendChild
 						(
 							graficaPuntos(pCol , pColSig)
 						);
 					}
 				}
+				
+				//Al hacer click en el documento, generar los puntos.
 				document.body.addEventListener
 				(
 					"click",
 					genPuntos
 				);
 				
+				
+				//Creo una pared.
 				paredA=new Pared();
 				
+				//Si no hay nada en el localStorage.
 				if(!localStorage.length)
 				{
+					//ParedA es la pared devuelta por creaMapa.
 					var paredA=creaMapa
 					(
-						0,
-						[
-							[50,50],
-							[100,50]
-						],
-						[
-							20,
-							30
-						]
+						10,
+						[50,50],
+						[450,450]
 					);
 				}
 				else
 				{
+					//Si hay algo en el localStorage, lo cargo.
 					cargaMapaLocal();
 				}
 				
+				
+				//Averigua los puntos de colisión cercanos a una determinada posición XY.
 				function puntosColCercanos()
 				{
+					//Por el momento, se toma como referencia XY la posición de charl.
+					//A futuro será la de un personaje cualquiera.
 					var posX=charl.posX;
 					var posY=charl.posY;
-					var puntosCol=[0,0,0,0];
+					var puntosCol=[0,0,0,0];	//Acá van a quedar los numeros mediante los que se puden referenciar los puntos.
+					
+					//Doy un valor inicial a los buffers que almacenan la distancia.
+					//Este valor inicial es la distancia entre charl y el primer punto de la pared.
 					var distSupDer=Hipo(paredA.puntosCol[0].posX-posX,paredA.puntosCol[0].posY-posY);
 					var distInfDer=Hipo(paredA.puntosCol[0].posX-posX,paredA.puntosCol[0].posY-posY);;
 					var distSupIzq=Hipo(posX-paredA.puntosCol[0].posX,posY-paredA.puntosCol[0].posY);;
 					var distInfIzq=Hipo(paredA.puntosCol[0].posX-posX,paredA.puntosCol[0].posY-posY);;
+					
+					//Recorro todos los puntos de la pared.					
 					var j=1;
 					while(j<paredA.puntosCol.length)
 					{
-					 var colAct=paredA.puntosCol[j];
+					 var colAct=paredA.puntosCol[j];	//Variable para referenciar al punto actual del bucle.
 					 
-					 var dist=Hipo(posX-colAct.posX,posY-colAct.posY);
+					 var dist=Hipo(posX-colAct.posX,posY-colAct.posY);	//Calculo la distancia (hipotenusa) entre charl y el punto actual.
 					 
+						//Me fijo si el punto está a la izquierda y por ensima de charl.
 						if(colAct.posY>posY&&colAct.posX<posX)
 						{
 							if(dist<distSupIzq)
 							{
-								distSupIzq=dist;
+								distSupIzq=dist;	//Si esta distancia es menor a la almacenada, la guardo.
 								puntosCol[2]=j;
 							}
-						}
+						};
+						
+						//Me fijo si el punto está a la izquierda y por debajo de charl.
 						if(colAct.posY<posY&&colAct.posX<posX)
 						{
 							if(dist<distInfIzq)
 							{
-								distInfIzq=dist;
+								distInfIzq=dist;	//Si esta distancia es menor a la almacenada, la guardo.
 								puntosCol[3]=j;
 							}
 						}
+						
+						//Me fijo si el punto está a la derecha y por ensima de charl.
 						if(colAct.posY>posY&&colAct.posX>posX)
 						{
 							if(dist<distSupDer)
 							{
-								distSupDer=dist;
+								distSupDer=dist;	//Si esta distancia es menor a la almacenada, la guardo.
 								puntosCol[0]=j;
 							}
 						}
+						
+						//Me fijo si el punto está a la derecha y por debajo de charl.
 						if(colAct.posY<posY&&colAct.posX>posX)
 						{
 							if(dist<distInfDer)
@@ -152,6 +189,7 @@
 								puntosCol[1]=j;
 							}
 						}
+						
 						j++
 					}
 					
@@ -162,13 +200,18 @@
 						window.console.log(document.getElementsByTagName("span")[puntosCol[j]+1])
 					}
 				}
+				
+				//Creo a charl y lo ubico en la posición (80 ; 80).
 				charl=new Tipito
 				(
 					80,
 					80
 				);
+				
+				//La función a ejecutarse cada vez que se mueva.
 				charl.refresca=function()
 				{
+					//Actualizo los valores XY de la posición de charl.
 					document.getElementById("caja").style.left=this.posX+"px";
 					document.getElementById("caja").style.top=this.posY+"px";
 				};
@@ -187,6 +230,8 @@
 					paredB.puntosCol[3].posX
 				)*/
 				
+				//Creo los eventos que se van a asociar a un numero de tecla.
+				//Moverse.
 				mueveIzq=new TeclaEvt
 				(
 					{
@@ -234,6 +279,8 @@
 						}
 					}
 				);
+				
+				//Borrar el contenido de localStorage (borrar el mapa).
 				borraMapaLocal=new TeclaEvt
 				(
 					{
@@ -244,6 +291,9 @@
 						}
 					}
 				);
+				
+				//Asocio cada tecla a su numero correspondiente con una instancia a Teclado
+				//que comunica los eventos de teclado con las teclas.
 				capTeclado=new Teclado();
 				capTeclado.nEvt(39 , mueveDer);
 				capTeclado.nEvt(37 , mueveIzq);
@@ -252,6 +302,7 @@
 				capTeclado.nEvt(8 , borraMapaLocal);
 				
 				
+				//Al presionar una tecla llamar a capTeclado.detona().
 				document.body.addEventListener
 				(
 					"keydown",
@@ -260,6 +311,8 @@
 						capTeclado.detona(event)
 					}
 				);
+				
+				//Al levantar una tecla llamar a capTeclado.detona().
 				document.body.addEventListener
 				(
 					"keyup",
