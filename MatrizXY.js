@@ -28,3 +28,74 @@ MatrizXY=function(xa,ya,xb,yb,columnas,filas)
 		}
 	}
 }
+MatrizXY.prototype.sobre=function(nCelda)
+{ 
+	var n=nCelda-this.columnas;
+	if(n<0)
+	{
+		return this.celda.length+n;
+	}
+	return n;
+}
+MatrizXY.prototype.debajo=function(nCelda)
+{
+	var n=nCelda+this.columnas;
+	
+	if(n>this.celda.length)
+	{
+		return n-this.celda.length
+	}
+	return n;
+}
+MatrizXY.prototype.derecha=function(nCelda)
+{
+	var n=nCelda+1;
+	
+	if(n>this.celda.length)
+	{
+		return n-this.celda.length
+	}
+	return n;
+}
+MatrizXY.prototype.izquierda=function(nCelda)
+{
+	var n=nCelda-1;
+	
+	if(n<0)
+	{
+		return this.celda.length+n
+	}
+	return n;
+}
+MatrizXY.prototype.haySobre=function(nCelda)
+{
+	if(this.sobre(nCelda)>nCelda)
+	{
+		return 0;
+	}
+	return 1;
+}
+MatrizXY.prototype.hayDebajo=function(nCelda)
+{
+	if(this.debajo(nCelda)<nCelda)
+	{
+		return 0;
+	}
+	return 1;
+}
+MatrizXY.prototype.hayIzquierda=function(nCelda)
+{
+	if((nCelda)<=Math.floor(nCelda/this.filas)*this.filas)
+	{
+		return 0;
+	}
+	return 1;
+}
+MatrizXY.prototype.hayDerecha=function(nCelda)
+{
+	if(nCelda<Math.ceil(nCelda/this.filas)*this.filas)
+	{
+		return 0;
+	}
+	return 1;
+}

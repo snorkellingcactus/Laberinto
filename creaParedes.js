@@ -1,8 +1,9 @@
 function puntoHV(HV,sentido,ancho,alto)	//Crea un punto horizontal o vertical.
 {
 	//HV 1 o 0 define si es horizontal o vertical, respectivamente.
+	sentido=(sentido||-1)					//Si sentido es 0 se queda con -1. Si sentido es 1, no evalua y se queda con 1.
 	
-	return[ancho*HV*(sentido||-1) , alto*!HV*(sentido||-1)]
+	return[ancho*HV*sentido , alto*!HV*sentido]
 }
 
 //Función que genera puntos random y devuelve una pared con esos puntos.
@@ -15,73 +16,14 @@ function creaMapa(cantidad,puntoIni,puntoFin)
 		puntoIni[1],
 		puntoFin[0],
 		puntoFin[1],
-		10,
-		10
+		20,
+		20
 	);
 	pared=new Pared([puntoIni,puntoIni]);
 	var HV=true;
 	
 	for(var c=0;c<matriz.celda.length;c++)
 	{
-		//Defino los posibles sentidos.
-		var HV=Math.random()*100;
-		
-		var punto;
-		if(HV<25)
-		{
-			//Linea hacia la derecha.
-			punto=puntoHV
-			(
-				1,
-				1,
-				matriz.an,
-				matriz.al
-			);
-		}
-		if(HV>=25&&HV<50)
-		{
-			//Linea hacia abajo.
-			punto=puntoHV
-			(
-				0,
-				0,
-				matriz.an,
-				matriz.al
-			);
-		}
-		if(HV>=50&&HV<75)
-		{
-			//Linea hacia la izquierda.
-			punto=puntoHV
-			(
-				1,
-				0,
-				matriz.an,
-				matriz.al
-			);
-		}
-		if(HV>=75&&HV<=100)
-		{
-			//Linea Hacia arriba.
-			punto=puntoHV
-			(
-				0,
-				1,
-				matriz.an,
-				matriz.al
-			);
-		}
-		
-		//Le asigno el punto random generado a la pared. 
-		pared.procesaPuntos
-		(
-			[
-				[
-					pared.puntosCol[pared.puntosCol.length-1].posX+punto[0],
-					pared.puntosCol[pared.puntosCol.length-1].posY+punto[1]
-				]
-			]
-		);
 		//Creo divs para graficar la grilla en el documento HTMl.
 		
 		//Divs para las lineas horizontales.
@@ -107,6 +49,63 @@ function creaMapa(cantidad,puntoIni,puntoFin)
 		document.body.appendChild(spanB);
 	};
 	
+	var nCelda=0;
+	for(var i=0;i<cantidad;i++)
+	{
+		//Defino los posibles sentidos.
+		var HV=getBinRamon();				//Horizontal hacia la derecha, vertical hacia abajo.
+		var sentido=getBinRamon();			//Hacia la izquierda o hacia arriba.
+		var noHV;								//Que no se puedan hacer lineas horizontales hacia la derecha o verticales hacia abajo.
+		var noSentido;							//Que no se puedan hacer lineas horizontales hacia la izquierda o verticales hacia arriba.
+		
+		if(!matriz.haySobre(nCelda)&&!HV || !matriz.hayIzquierda(nCelda)&&HV)
+		{
+			sentido=1;
+		};
+		if(!matriz.hayDebajo(nCelda)&&!HV || !matriz.hayDerecha(nCelda)&&HV)
+		{
+			sentido=0;
+		};
+		//Punto random.
+		var punto=puntoHV
+		(
+			HV,
+			sentido,
+			matriz.an,
+			matriz.al
+		);
+		//Me muevo a la celda de la derecha
+		if(HV&&!sentido)
+		{
+			nCelda=matriz.derecha(nCelda);
+		}
+		//Me muevo a la celda de la izquierda
+		if(HV&&sentido)
+		{
+			nCelda=matriz.izquierda(nCelda);
+		}
+		//Me muevo a la celda de abajo
+		if(!HV&&!sentido)
+		{
+			nCelda=matriz.debajo(nCelda);
+		}
+		//Me muevo a la celda de arriba
+		if(!HV&&sentido)
+		{
+			nCelda=matriz.sobre(nCelda);
+		}
+		
+		//Le asigno el punto random generado a la pared. 
+		pared.procesaPuntos
+		(
+			[
+				[
+					pared.puntosCol[pared.puntosCol.length-1].posX+punto[0],
+					pared.puntosCol[pared.puntosCol.length-1].posY+punto[1]
+				]
+			]
+		);
+	}
 	//Dibujo los puntos de la pared.
 	graficaPared(pared);
 	
