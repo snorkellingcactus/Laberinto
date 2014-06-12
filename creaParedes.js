@@ -55,17 +55,27 @@ function creaMapa(cantidad,puntoIni,puntoFin)
 		//Defino los posibles sentidos.
 		var HV=getBinRamon();				//Horizontal hacia la derecha, vertical hacia abajo.
 		var sentido=getBinRamon();			//Hacia la izquierda o hacia arriba.
-		var noHV;								//Que no se puedan hacer lineas horizontales hacia la derecha o verticales hacia abajo.
-		var noSentido;							//Que no se puedan hacer lineas horizontales hacia la izquierda o verticales hacia arriba.
 		
-		if(!matriz.haySobre(nCelda)&&!HV || !matriz.hayIzquierda(nCelda)&&HV)
+		if(!matriz.haySobre(nCelda)&&!HV)
 		{
+			window.console.log("No hay superior");
 			sentido=1;
 		};
-		if(!matriz.hayDebajo(nCelda)&&!HV || !matriz.hayDerecha(nCelda)&&HV)
+		if(!matriz.hayIzquierda(nCelda)&&HV)
 		{
+			window.console.log("No hay izquierda");
+			sentido=1;
+		}
+		if(!matriz.hayDebajo(nCelda)&&!HV)
+		{
+			window.console.log("No hay inferior");
 			sentido=0;
 		};
+		if(!matriz.hayDerecha(nCelda)&&HV)
+		{
+			window.console.log("No hay derecha");
+			sentido=0;
+		}
 		//Punto random.
 		var punto=puntoHV
 		(
@@ -75,23 +85,27 @@ function creaMapa(cantidad,puntoIni,puntoFin)
 			matriz.al
 		);
 		//Me muevo a la celda de la derecha
-		if(HV&&!sentido)
+		if(HV&&sentido)
 		{
+			window.console.log("La derecha de "+nCelda+" es "+matriz.derecha(nCelda));
 			nCelda=matriz.derecha(nCelda);
 		}
 		//Me muevo a la celda de la izquierda
-		if(HV&&sentido)
+		if(HV&&!sentido)
 		{
+			window.console.log("La izquierda de "+nCelda+" es "+matriz.izquierda(nCelda));
 			nCelda=matriz.izquierda(nCelda);
 		}
 		//Me muevo a la celda de abajo
-		if(!HV&&!sentido)
+		if(!HV&&sentido)
 		{
+			window.console.log("La inferior de "+nCelda+" es "+matriz.debajo(nCelda));
 			nCelda=matriz.debajo(nCelda);
 		}
 		//Me muevo a la celda de arriba
-		if(!HV&&sentido)
+		if(!HV&&!sentido)
 		{
+			window.console.log("La superior de "+nCelda+" es "+matriz.sobre(nCelda));
 			nCelda=matriz.sobre(nCelda);
 		}
 		

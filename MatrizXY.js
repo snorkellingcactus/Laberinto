@@ -28,6 +28,7 @@ MatrizXY=function(xa,ya,xb,yb,columnas,filas)
 		}
 	}
 }
+//Devuelve el número de celda de la celda que está sobre el número de celda que recibe.
 MatrizXY.prototype.sobre=function(nCelda)
 { 
 	var n=nCelda-this.columnas;
@@ -37,6 +38,7 @@ MatrizXY.prototype.sobre=function(nCelda)
 	}
 	return n;
 }
+//Devuelve el número de celda de la celda que está debajo del número de celda que recibe.
 MatrizXY.prototype.debajo=function(nCelda)
 {
 	var n=nCelda+this.columnas;
@@ -47,6 +49,7 @@ MatrizXY.prototype.debajo=function(nCelda)
 	}
 	return n;
 }
+//Devuelve el número de celda de la celda que está a la derecha del número de celda que recibe.
 MatrizXY.prototype.derecha=function(nCelda)
 {
 	var n=nCelda+1;
@@ -57,6 +60,7 @@ MatrizXY.prototype.derecha=function(nCelda)
 	}
 	return n;
 }
+//Devuelve el número de celda de la celda que está a la izquierda del número de celda que recibe.
 MatrizXY.prototype.izquierda=function(nCelda)
 {
 	var n=nCelda-1;
@@ -67,6 +71,7 @@ MatrizXY.prototype.izquierda=function(nCelda)
 	}
 	return n;
 }
+//Devuelve 1 o 0 si es que hay o no (respectivamente) una celda sobre el número de celda que recibe.
 MatrizXY.prototype.haySobre=function(nCelda)
 {
 	if(this.sobre(nCelda)>nCelda)
@@ -75,6 +80,7 @@ MatrizXY.prototype.haySobre=function(nCelda)
 	}
 	return 1;
 }
+//Devuelve 1 o 0 si es que hay o no (respectivamente) una celda debajo del número de celda que recibe.
 MatrizXY.prototype.hayDebajo=function(nCelda)
 {
 	if(this.debajo(nCelda)<nCelda)
@@ -83,6 +89,7 @@ MatrizXY.prototype.hayDebajo=function(nCelda)
 	}
 	return 1;
 }
+//Devuelve 1 o 0 si es que hay o no (respectivamente) una celda a la izquierda del número de celda que recibe.
 MatrizXY.prototype.hayIzquierda=function(nCelda)
 {
 	if((nCelda)<=Math.floor(nCelda/this.filas)*this.filas)
@@ -91,9 +98,10 @@ MatrizXY.prototype.hayIzquierda=function(nCelda)
 	}
 	return 1;
 }
+//Devuelve 1 o 0 si es que hay o no (respectivamente) una celda a la derecha del número de celda que recibe.
 MatrizXY.prototype.hayDerecha=function(nCelda)
 {
-	if(nCelda<Math.ceil(nCelda/this.filas)*this.filas)
+	if((nCelda+1)>=(Math.ceil((nCelda+1)/this.filas))*(this.filas))
 	{
 		return 0;
 	}
