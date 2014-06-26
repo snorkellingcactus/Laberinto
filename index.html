@@ -122,6 +122,12 @@
 				else
 				{
 					//Si hay algo en el localStorage, lo cargo.
+					var paredA=creaMapa
+					(
+						0,
+						[50,50],
+						[450,450]
+					);
 					cargaMapaLocal();
 				}
 				
@@ -204,8 +210,8 @@
 				//Creo a charl y lo ubico en la posición (80 ; 80).
 				charl=new Tipito
 				(
-					80,
-					80
+					250,
+					210
 				);
 				
 				//La función a ejecutarse cada vez que se mueva.
@@ -232,53 +238,75 @@
 				
 				//Creo los eventos que se van a asociar a un numero de tecla.
 				//Moverse.
+				
+					
 				mueveIzq=new TeclaEvt
 				(
-					{
+				    {
 						jugador:charl,
 						keydown:function()
 						{
-							this.jugador.setPosX(-2);
-							this.jugador.refresca();
+							var actualiza=this.mover(0,1,this.jugador.posX,this.jugador.posY);
+							
+							if(actualiza)
+							{
+								this.jugador.setPosX(-20);
+								this.jugador.refresca();
+							}
 						}
 					}
 				);
-				
 				mueveDer=new TeclaEvt
 				(
-					{
+				    {
 						jugador:charl,
 						keydown:function()
 						{
-							this.jugador.setPosX(2);
-							this.jugador.refresca();
-						}
-					}
+						
+						var actualiza=this.mover(0,1,(this.jugador.posX + 20),this.jugador.posY);
+							
+							if(actualiza)
+							{
+								this.jugador.setPosX(20);
+								this.jugador.refresca();
+							}
+					}	}
 				);
-				
 				mueveAr=new TeclaEvt
 				(
-					{
+				    {
 						jugador:charl,
 						keydown:function()
 						{
-							this.jugador.setPosY(-2);
+						
+						var actualiza=this.mover(1,1,this.jugador.posX,this.jugador.posY);
+							
+							if(actualiza)
+							{
+							this.jugador.setPosY(-20);
 							this.jugador.refresca();
+							}
+						}
+					}
+				);
+				mueveAb=new TeclaEvt
+				(
+				    {
+						jugador:charl,
+						keydown:function()
+						{
+						var actualiza=this.mover(1,1,this.jugador.posX,(this.jugador.posY+20));
+							
+							if(actualiza)
+							{
+							this.jugador.setPosY(20);
+							this.jugador.refresca();
+							}
 						}
 					}
 				);
 				
-				mueveAb=new TeclaEvt
-				(
-					{
-						jugador:charl,
-						keydown:function()
-						{
-							this.jugador.setPosY(2);
-							this.jugador.refresca();
-						}
-					}
-				);
+				
 				
 				//Borrar el contenido de localStorage (borrar el mapa).
 				borraMapaLocal=new TeclaEvt
@@ -308,6 +336,7 @@
 					"keydown",
 					function(event)
 					{
+						document.getElementById("string").innerHTML="( "+charl.posX+" ; "+charl.posY+" )";
 						capTeclado.detona(event)
 					}
 				);

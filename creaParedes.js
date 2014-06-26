@@ -58,22 +58,22 @@ function creaMapa(cantidad,puntoIni,puntoFin)
 		
 		if(!matriz.haySobre(nCelda)&&!HV)
 		{
-			window.console.log("No hay superior");
+			//window.console.log("No hay superior");
 			sentido=1;
 		};
 		if(!matriz.hayIzquierda(nCelda)&&HV)
 		{
-			window.console.log("No hay izquierda");
+			//window.console.log("No hay izquierda");
 			sentido=1;
 		}
 		if(!matriz.hayDebajo(nCelda)&&!HV)
 		{
-			window.console.log("No hay inferior");
+			//window.console.log("No hay inferior");
 			sentido=0;
 		};
 		if(!matriz.hayDerecha(nCelda)&&HV)
 		{
-			window.console.log("No hay derecha");
+			//window.console.log("No hay derecha");
 			sentido=0;
 		}
 		//Punto random.
@@ -87,25 +87,25 @@ function creaMapa(cantidad,puntoIni,puntoFin)
 		//Me muevo a la celda de la derecha
 		if(HV&&sentido)
 		{
-			window.console.log("La derecha de "+nCelda+" es "+matriz.derecha(nCelda));
+			//window.console.log("La derecha de "+nCelda+" es "+matriz.derecha(nCelda));
 			nCelda=matriz.derecha(nCelda);
 		}
 		//Me muevo a la celda de la izquierda
 		if(HV&&!sentido)
 		{
-			window.console.log("La izquierda de "+nCelda+" es "+matriz.izquierda(nCelda));
+			//window.console.log("La izquierda de "+nCelda+" es "+matriz.izquierda(nCelda));
 			nCelda=matriz.izquierda(nCelda);
 		}
 		//Me muevo a la celda de abajo
 		if(!HV&&sentido)
 		{
-			window.console.log("La inferior de "+nCelda+" es "+matriz.debajo(nCelda));
+			//window.console.log("La inferior de "+nCelda+" es "+matriz.debajo(nCelda));
 			nCelda=matriz.debajo(nCelda);
 		}
 		//Me muevo a la celda de arriba
 		if(!HV&&!sentido)
 		{
-			window.console.log("La superior de "+nCelda+" es "+matriz.sobre(nCelda));
+			//window.console.log("La superior de "+nCelda+" es "+matriz.sobre(nCelda));
 			nCelda=matriz.sobre(nCelda);
 		}
 		

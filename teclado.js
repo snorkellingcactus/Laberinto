@@ -87,3 +87,57 @@ TeclaEvt.prototype.detona=function(accion)
 		this[accion]();			//Ejecuto el método de la tecla correspondiente a tal tipo de evento.
 	}
 }
+
+TeclaEvt.prototype.mover=function(direccion,sentido,xOrig,yOrig)
+{
+
+		var punto=puntoHV
+		(
+			direccion,
+			sentido,
+			matriz.an,
+			matriz.al
+		);
+		var v= new Array (xOrig,yOrig);
+		var p1=1;
+		var p2=1;
+		
+			for(var ind=0;ind<pared.puntosCol.length;ind++)
+			{
+				if(v[0]==pared.puntosCol[ind].posX && v[1]==pared.puntosCol[ind].posY)
+				{
+					p1=0;
+					break;
+				}
+			};
+			
+			if(!p1)
+			{
+				//window.console.log("Se encontró un punto en ( "+v[0]+" ; "+v[1]+" )");
+			}
+			
+			//window.console.log("Se calculó el punto ( "+v[0]+" ; "+v[1]+" )");
+			v[0]+=punto[0];
+			v[1]+=punto[1];
+			
+			for(var ind=0;ind<pared.puntosCol.length;ind++)
+			{
+				if(v[0]==pared.puntosCol[ind].posX && v[1]==pared.puntosCol[ind].posY)
+				{
+					p2=0;
+					break;
+				}
+			}
+			if(!p2)
+			{
+				//window.console.log("Se encontró un punto en ( "+v[0]+" ; "+v[1]+" )");
+			}
+			if(p1==0 && p2==0)
+			{
+			//window.console.log("Existe una pared hacia esa direccion");
+			return 0;
+			}
+			
+			//window.console.log("No existe una pared hacia esa direccion");
+			return 1;
+}			
